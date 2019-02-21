@@ -12,13 +12,33 @@ export class LoginForm extends Component {
       email: '',
       password: '',
     },
-    loading: false,
+    loading: this.props.loading,
     errors: {},
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.loading !== nextProps.loading) {
+      return {loading: nextProps.loading};
+    }
+    return null;
+  }
+
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+
+    if(this.state === nextState){
+      return false;
+    }
+    else if (this.props === nextProps && this.state === nextState) {
+       return false;
+     }else{
+       return true;
+     }
+  }
+
   onChange = (e) => {
     this.setState({
-      data: { ...this.state.data,
+      data: {
+        ...this.state.data,
         [e.target.name]: e.target.value,
       },
     });
@@ -42,7 +62,8 @@ export class LoginForm extends Component {
   }
 
   render() {
-    const { data, errors } = this.state;
+    const { data, errors, loading } = this.state;
+    //console.log(' I am rendered @' + Date())
     return (
       <Form>
         <Form.Field error={!!errors.email}>
@@ -69,7 +90,7 @@ export class LoginForm extends Component {
           />
           {errors.password && <InlineError text={errors.password} />}
         </Form.Field>
-        <Button primary onClick={this.onSubmit}>Login</Button>
+        <Button primary onClick={this.onSubmit}>{ loading ? 'Loading ...': 'Login' }</Button>
       </Form>
     );
   }
@@ -77,6 +98,7 @@ export class LoginForm extends Component {
 
 LoginForm.propTypes = {
   submit: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default LoginForm;
