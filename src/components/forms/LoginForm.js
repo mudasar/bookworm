@@ -9,8 +9,8 @@ import InlineError from '../messages/InlineError';
 export class LoginForm extends Component {
   state = {
     data: {
-      email: '',
-      password: '',
+      email: 'mudasar.rauf@latra.com',
+      password: 'password',
     },
     loading: this.props.loading,
     errors: {},

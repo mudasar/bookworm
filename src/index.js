@@ -15,6 +15,7 @@ import {configureStore, history } from './redux/store';
 
 const store = configureStore({});
 
+
 ReactDOM.render(
   
     <Provider store={store} context={ReactReduxContext}>
