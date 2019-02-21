@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Validator from 'validator';
 
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button } from 'semantic-ui-react';
 
 import InlineError from '../messages/InlineError';
 
@@ -10,34 +10,35 @@ export class LoginForm extends Component {
   state = {
     data: {
       email: '',
-      password: ''
+      password: '',
     },
     loading: false,
-    errors: {}
+    errors: {},
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      data: { ...this.state.data ,
-        [e.target.name]: e.target.value
-    }
+      data: { ...this.state.data,
+        [e.target.name]: e.target.value,
+      },
     });
   };
 
   onSubmit = () => {
-      const errors = this.validate(this.state.data);
-      this.setState({errors});
+    const { data } = this.state;
+    const errors = this.validate(data);
+    this.setState({ errors });
 
-      if (Object.keys(errors).length === 0) {
-          this.props.submit(this.state.data);
-      }
+    if (Object.keys(errors).length === 0) {
+      this.props.submit(this.state.data);
+    }
   }
 
   validate = (data) => {
-      const errors = {};
-      if(!Validator.isEmail(data.email)) errors.email = `Invalid Email`;
-      if(!data.password) errors.password = `Password can't be empty`;
-      return errors;
+    const errors = {};
+    if (!Validator.isEmail(data.email)) errors.email = 'Invalid Email';
+    if (!data.password) errors.password = 'Password can\'t be empty';
+    return errors;
   }
 
   render() {
@@ -75,7 +76,7 @@ export class LoginForm extends Component {
 }
 
 LoginForm.propTypes = {
-    submit: PropTypes.func.isRequired
+  submit: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
