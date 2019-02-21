@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Validator from 'validator';
 
-import { Form, Button } from 'semantic-ui-react';
-
+import { Form, Button, Message } from 'semantic-ui-react';
+import { ScaleLoader } from 'react-spinners';
 import InlineError from '../messages/InlineError';
 
 export class LoginForm extends Component {
@@ -17,9 +17,13 @@ export class LoginForm extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.error && nextProps.error.data && prevState.errors !== nextProps.error.data.errors) {
+      return { errors:  nextProps.error.data.errors, loading: nextProps.loading};
+    }
     if (prevState.loading !== nextProps.loading) {
       return {loading: nextProps.loading};
     }
+   
     return null;
   }
 
@@ -65,7 +69,11 @@ export class LoginForm extends Component {
     const { data, errors, loading } = this.state;
     //console.log(' I am rendered @' + Date())
     return (
-      <Form>
+      <Form onSubmit={this.onSubmit} loading={loading}>
+      {errors.global && <Message negative>
+        <Message.Header>Some thing went wrong</Message.Header>
+        <p>{errors.global}</p>
+      </Message>}
         <Form.Field error={!!errors.email}>
           <label htmlFor="email">Email</label>
           <input
@@ -90,7 +98,14 @@ export class LoginForm extends Component {
           />
           {errors.password && <InlineError text={errors.password} />}
         </Form.Field>
-        <Button primary onClick={this.onSubmit}>{ loading ? 'Loading ...': 'Login' }</Button>
+      
+        <Button disabled={loading} primary >Login</Button>
+        {/* {loading && <ScaleLoader
+          sizeUnit={"px"}
+          size={10}
+          color={'#123abc'}
+          loading={loading}
+        />} */}
       </Form>
     );
   }
